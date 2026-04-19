@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clara — Know your money.</title>
+  <meta name="description" content="Upload your bank statement and Clara turns it into a clear picture of where your money goes — and where it could go instead. AI-powered personal finance for Australians.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ── Reset & base ─────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #0b0b12;
+      color: #F2EEE6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── CSS variables ────────────────────────────────────────────────────── */
+    :root {
+      --gold: #F5B731;
+      --night: #0b0b12;
+      --surface: #171720;
+      --surface-2: #0f0f18;
+      --border: #1c1c28;
+      --border-2: #252535;
+      --text-primary: #F2EEE6;
+      --text-secondary: #888;
+      --text-muted: #444;
+      --text-dim: #333345;
+      --spend: #9e4a4a;
+      --income: #2e8f66;
+      --transport: #4a6fa8;
+      --shopping: #6b5aa8;
+      --food: #a87818;
+      --subscriptions: #8e4898;
+    }
+
+    /* ── Typography ───────────────────────────────────────────────────────── */
+    .serif-italic {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+    }
+
+    /* ── Layout ───────────────────────────────────────────────────────────── */
+    .container { max-width: 1080px; margin: 0 auto; padding: 0 2.5rem; }
+
+    /* ── Navigation ───────────────────────────────────────────────────────── */
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 2.5rem;
+      border-bottom: 0.5px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(11, 11, 18, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 26px;
+      color: var(--gold);
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+    .nav-link {
+      font-size: 13px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-link:hover { color: var(--text-primary); }
+    .nav-actions { display: flex; gap: 10px; align-items: center; }
+    .btn-ghost {
+      font-size: 13px;
+      color: var(--text-secondary);
+      padding: 8px 16px;
+      border: 0.5px solid var(--border-2);
+      border-radius: 6px;
+      text-decoration: none;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .btn-ghost:hover { color: var(--text-primary); border-color: var(--text-secondary); }
+    .btn-gold {
+      font-size: 13px;
+      color: var(--night);
+      background: var(--gold);
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .btn-gold:hover { opacity: 0.88; }
+
+    /* ── Beta banner ──────────────────────────────────────────────────────── */
+    .beta-bar {
+      background: var(--surface);
+      border-bottom: 0.5px solid var(--border);
+      padding: 0.65rem 1rem;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .beta-pill {
+      background: var(--gold);
+      color: var(--night);
+      font-size: 10px;
+      font-weight: 500;
+      padding: 3px 9px;
+      border-radius: 20px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .beta-text { font-size: 12px; color: var(--text-muted); }
+
+    /* ── Hero ─────────────────────────────────────────────────────────────── */
+    .hero {
+      padding: 5rem 2.5rem 0;
+      text-align: center;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .hero-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+    .hero-h1 {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: clamp(40px, 5vw, 54px);
+      color: var(--text-primary);
+      line-height: 1.05;
+      margin-bottom: 1.1rem;
+      white-space: nowrap;
+    }
+    .hero-sub {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      max-width: 500px;
+      margin: 0 auto 1.75rem;
+    }
+    .hero-cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 3.5rem;
+    }
+    .btn-primary-lg {
+      background: var(--gold);
+      color: var(--night);
+      padding: 14px 32px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .btn-primary-lg:hover { opacity: 0.88; }
+
+    /* ── Hero screenshot ──────────────────────────────────────────────────── */
+    .hero-screenshot {
+      background: var(--surface);
+      border: 0.5px solid var(--border-2);
+      border-radius: 14px 14px 0 0;
+      overflow: hidden;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    .ss-titlebar {
+      background: var(--surface-2);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .ss-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border-2); }
+    .ss-logo {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 14px;
+      color: var(--gold);
+      margin: 0 auto;
+    }
+    .ss-spacer { width: 24px; }
+    .ss-body { padding: 1.25rem; }
+    .ss-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .ss-metric {
+      background: var(--surface-2);
+      border-radius: 8px;
+      padding: 11px 13px;
+    }
+    .ss-metric-label {
+      font-size: 9px;
+      color: var(--dim);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      color: var(--text-dim);
+    }
+    .ss-metric-value { font-size: 20px; font-weight: 300; }
+    .ss-insight {
+      background: var(--surface-2);
+      border: 0.5px solid var(--gold);
+      border-radius: 8px;
+      padding: 11px 13px;
+      margin-bottom: 10px;
+    }
+    .ss-insight-label {
+      font-size: 9px;
+      color: var(--gold);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .ss-insight-text { font-size: 11px; color: var(--text-muted); line-height: 1.6; }
+    .ss-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .ss-card { background: var(--surface-2); border-radius: 8px; padding: 12px; }
+    .ss-card-label {
+      font-size: 9px;
+      color: var(--text-dim);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .vendor-row { display: flex; justify-content: space-between; margin-bottom: 3px; }
+    .vendor-name { font-size: 10px; color: var(--text-muted); }
+    .vendor-amt { font-size: 10px; color: var(--text-primary); font-weight: 300; }
+    .vendor-bar-bg { background: var(--surface); border-radius: 2px; height: 2px; margin-bottom: 7px; }
+    .vendor-bar { height: 2px; border-radius: 2px; }
+    .ss-donut-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+
+    /* ── Section base ─────────────────────────────────────────────────────── */
+    .section {
+      padding: 5rem 2.5rem;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.9rem;
+    }
+    .section-title {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: clamp(28px, 3.5vw, 38px);
+      color: var(--text-primary);
+      line-height: 1.15;
+      margin-bottom: 0.9rem;
+    }
+    .section-sub {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      max-width: 500px;
+    }
+
+    /* ── How it works ─────────────────────────────────────────────────────── */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin-top: 3rem;
+    }
+    .step {
+      padding: 1.5rem;
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: 12px;
+    }
+    .step-img {
+      background: var(--surface-2);
+      border-radius: 8px;
+      height: 140px;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .step-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+      border-radius: 8px;
+    }
+    .step-img-placeholder {
+      font-size: 9px;
+      color: var(--border);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .step-num {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 28px;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+    .step-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 0.4rem;
+    }
+    .step-body { font-size: 12px; color: var(--text-secondary); line-height: 1.7; }
+
+    /* ── Features ─────────────────────────────────────────────────────────── */
+    .features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 3rem;
+    }
+    .feat {
+      padding: 1.5rem;
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: 12px;
+      transition: border-color 0.2s;
+    }
+    .feat:hover { border-color: var(--border-2); }
+    .feat-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 7px;
+      background: var(--surface-2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    .feat-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 0.4rem;
+    }
+    .feat-body { font-size: 12px; color: var(--text-secondary); line-height: 1.7; }
+
+    /* ── Coming soon ──────────────────────────────────────────────────────── */
+    .coming {
+      margin-top: 3rem;
+      background: var(--surface);
+      border: 0.5px solid var(--border-2);
+      border-radius: 14px;
+      padding: 2rem;
+    }
+    .coming-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .coming-item {
+      padding: 1.25rem;
+      background: var(--surface-2);
+      border-radius: 10px;
+      border: 0.5px solid var(--border);
+    }
+    .coming-badge {
+      display: inline-block;
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #8D7AA8;
+      background: #1c1828;
+      padding: 3px 8px;
+      border-radius: 20px;
+      margin-bottom: 0.75rem;
+      border: 0.5px solid #2a1c38;
+    }
+    .coming-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 0.35rem;
+    }
+    .coming-body { font-size: 11px; color: var(--text-muted); line-height: 1.6; }
+
+    /* ── Pricing ──────────────────────────────────────────────────────────── */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 3rem;
+    }
+    .price-card {
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+    }
+    .price-card.featured { border-color: var(--gold); }
+    .price-badge {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--night);
+      font-size: 10px;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 0.75rem;
+    }
+    .price-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 0.4rem;
+    }
+    .price-amount {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 38px;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+    .price-period { font-size: 12px; color: var(--text-muted); margin-left: 3px; }
+    .price-desc { font-size: 11px; color: var(--text-dim); margin: 0.35rem 0 0.85rem; }
+    .price-divider { border: none; border-top: 0.5px solid var(--border); margin: 0.85rem 0; }
+    .price-feature {
+      font-size: 12px;
+      color: var(--text-secondary);
+      padding: 3px 0;
+      display: flex;
+      gap: 8px;
+    }
+    .price-feature.crossed { color: var(--border-2); }
+    .tick { color: var(--gold); }
+    .price-btn {
+      display: block;
+      text-align: center;
+      margin-top: 1.25rem;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .price-btn:hover { opacity: 0.85; }
+
+    /* ── FAQ ──────────────────────────────────────────────────────────────── */
+    .faq-list { margin-top: 2.5rem; }
+    .faq-item { border-bottom: 0.5px solid var(--border); }
+    .faq-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 0;
+      cursor: pointer;
+      user-select: none;
+    }
+    .faq-question { font-size: 14px; color: var(--text-primary); }
+    .faq-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 0.5px solid var(--border-2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: border-color 0.2s;
+    }
+    .faq-icon span {
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 1;
+      display: block;
+      transition: transform 0.25s, color 0.2s;
+    }
+    .faq-answer {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+    }
+    .faq-item.open .faq-answer {
+      max-height: 200px;
+      padding-bottom: 1.25rem;
+    }
+    .faq-item.open .faq-icon { border-color: var(--gold); }
+    .faq-item.open .faq-icon span { color: var(--gold); transform: rotate(45deg); }
+
+    /* ── CTA ──────────────────────────────────────────────────────────────── */
+    .cta-section {
+      padding: 6rem 2.5rem;
+      text-align: center;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .cta-title {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: clamp(36px, 4.5vw, 48px);
+      color: var(--text-primary);
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+    .cta-sub { font-size: 15px; color: var(--text-secondary); margin-bottom: 2.5rem; }
+
+    /* ── Footer ───────────────────────────────────────────────────────────── */
+    .footer {
+      padding: 2rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-logo {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 22px;
+      color: var(--gold);
+      text-decoration: none;
+    }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-link {
+      font-size: 12px;
+      color: var(--border-2);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-link:hover { color: var(--text-secondary); }
+    .footer-copy { font-size: 11px; color: var(--border); }
+
+    /* ── Responsive ───────────────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hero-h1 { white-space: normal; font-size: 38px; }
+      .steps { grid-template-columns: 1fr; }
+      .features { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .coming-grid { grid-template-columns: 1fr; }
+      .ss-row { grid-template-columns: 1fr; }
+      .ss-metrics { grid-template-columns: 1fr 1fr 1fr; }
+      .footer { flex-direction: column; gap: 1rem; text-align: center; }
+      .footer-links { flex-wrap: wrap; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <a class="nav-logo" href="#">Clara</a>
+    <div class="nav-links">
+      <a class="nav-link" href="#how">How it works</a>
+      <a class="nav-link" href="#features">Features</a>
+      <a class="nav-link" href="#pricing">Pricing</a>
+      <a class="nav-link" href="#faq">FAQ</a>
+    </div>
+    <div class="nav-actions">
+      <a class="btn-ghost" href="https://categoriz.streamlit.app/1_login" target="_blank">Log in</a>
+      <a class="btn-gold" href="https://categoriz.streamlit.app/2_signup" target="_blank">Sign up free</a>
+    </div>
+  </nav>
+
+  <!-- Beta banner -->
+  <div class="beta-bar">
+    <span class="beta-pill">Beta</span>
+    <span class="beta-text">Clara is in early access — free to try, no credit card required.</span>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <p class="hero-eyebrow">AI-powered personal finance</p>
+    <h1 class="hero-h1">Know your money.</h1>
+    <p class="hero-sub">Upload your bank statement and Clara turns it into a clear picture of where your money goes — and where it could go instead.</p>
+    <div class="hero-cta">
+      <a class="btn-primary-lg" href="https://categoriz.streamlit.app/2_signup" target="_blank">Start for free →</a>
+    </div>
+
+    <!-- App screenshot -->
+    <div class="hero-screenshot">
+      <div class="ss-titlebar">
+        <div class="ss-dot"></div>
+        <div class="ss-dot"></div>
+        <div class="ss-dot"></div>
+        <div class="ss-logo">Clara</div>
+        <div class="ss-spacer"></div>
+      </div>
+      <div class="ss-body">
+        <div class="ss-metrics">
+          <div class="ss-metric">
+            <div class="ss-metric-label">Total spent</div>
+            <div class="ss-metric-value" style="color: var(--spend)">$3,210.44</div>
+          </div>
+          <div class="ss-metric">
+            <div class="ss-metric-label">Income</div>
+            <div class="ss-metric-value" style="color: var(--income)">$5,200.00</div>
+          </div>
+          <div class="ss-metric">
+            <div class="ss-metric-label">Surplus</div>
+            <div class="ss-metric-value" style="color: var(--gold)">$1,989.56</div>
+          </div>
+        </div>
+        <div class="ss-insight">
+          <div class="ss-insight-label">✦ Clara's insight</div>
+          <div class="ss-insight-text">Your surplus this month was $1,989 — your strongest in three months. Subscriptions and fuel are your most consistent discretionary costs worth reviewing.</div>
+        </div>
+        <div class="ss-row">
+          <div class="ss-card">
+            <div class="ss-card-label">Top vendors</div>
+            <div class="vendor-row">
+              <span class="vendor-name">Ampol</span>
+              <span class="vendor-amt">$136.29</span>
+            </div>
+            <div class="vendor-bar-bg"><div class="vendor-bar" style="width:100%;background:var(--transport)"></div></div>
+            <div class="vendor-row">
+              <span class="vendor-name">Woolworths</span>
+              <span class="vendor-amt">$91.00</span>
+            </div>
+            <div class="vendor-bar-bg"><div class="vendor-bar" style="width:67%;background:var(--shopping)"></div></div>
+            <div class="vendor-row">
+              <span class="vendor-name">Dang Good Cafe</span>
+              <span class="vendor-amt">$35.15</span>
+            </div>
+            <div class="vendor-bar-bg"><div class="vendor-bar" style="width:26%;background:var(--food)"></div></div>
+          </div>
+          <div class="ss-card ss-donut-wrap">
+            <svg width="110" height="110" viewBox="0 0 110 110" aria-hidden="true">
+              <circle cx="55" cy="55" r="38" fill="none" stroke="#171720" stroke-width="16"/>
+              <circle cx="55" cy="55" r="38" fill="none" stroke="#9e4a4a" stroke-width="16" stroke-dasharray="80 159" stroke-dashoffset="0"/>
+              <circle cx="55" cy="55" r="38" fill="none" stroke="#4a6fa8" stroke-width="16" stroke-dasharray="35 204" stroke-dashoffset="-80"/>
+              <circle cx="55" cy="55" r="38" fill="none" stroke="#a87818" stroke-width="16" stroke-dasharray="44 195" stroke-dashoffset="-115"/>
+              <circle cx="55" cy="55" r="38" fill="none" stroke="#6b5aa8" stroke-width="16" stroke-dasharray="30 209" stroke-dashoffset="-159"/>
+              <circle cx="55" cy="55" r="38" fill="none" stroke="#8e4898" stroke-width="16" stroke-dasharray="50 189" stroke-dashoffset="-189"/>
+              <text x="55" y="51" text-anchor="middle" font-family="DM Sans" font-weight="300" font-size="13" fill="#F2EEE6">$3,210</text>
+              <text x="55" y="65" text-anchor="middle" font-family="DM Sans" font-size="10" fill="#333345">total spend</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="section" id="how">
+    <p class="section-label">How it works</p>
+    <h2 class="section-title">Three steps to clarity.</h2>
+    <p class="section-sub">No bank connection required. Upload your statement, Clara does the rest.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-img">
+          <!-- Replace src with real screenshot when ready -->
+          <span class="step-img-placeholder">Screenshot coming</span>
+        </div>
+        <div class="step-num">01</div>
+        <div class="step-title">Upload your statement</div>
+        <div class="step-body">Export a PDF from your bank's app or website. Clara works with any Australian bank statement format.</div>
+      </div>
+      <div class="step">
+        <div class="step-img">
+          <span class="step-img-placeholder">Screenshot coming</span>
+        </div>
+        <div class="step-num">02</div>
+        <div class="step-title">Redact private info</div>
+        <div class="step-body">Use the built-in redaction tool to black out account numbers and personal details before AI processing.</div>
+      </div>
+      <div class="step">
+        <div class="step-img">
+          <span class="step-img-placeholder">Screenshot coming</span>
+        </div>
+        <div class="step-num">03</div>
+        <div class="step-title">Understand your spending</div>
+        <div class="step-body">Clara categorises every transaction, generates an AI insight, and shows you exactly where your money goes.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="section" id="features">
+    <p class="section-label">Features</p>
+    <h2 class="section-title">Built for real finances.</h2>
+    <p class="section-sub">Not a budgeting app from 2015. Clara is built around how Australians actually bank.</p>
+    <div class="features">
+      <div class="feat">
+        <div class="feat-icon">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <rect x="2" y="2" width="12" height="12" rx="3" stroke="#F5B731" stroke-width="1.2"/>
+            <path d="M5 8h6M5 5.5h3" stroke="#F5B731" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="feat-title">AI categorisation</div>
+        <div class="feat-body">Clara reads your statement and categorises every transaction automatically. Edit anything with one tap, and Clara remembers your preferences next time.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M3 12L6 8l3 2 4-5" stroke="#7FA58A" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="feat-title">AI insights</div>
+        <div class="feat-body">After every analysis Clara surfaces one genuinely useful observation about your spending — specific, not generic. No "great job!" — just the truth.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <rect x="2" y="8" width="3" height="6" rx="1" fill="#6F8FAF"/>
+            <rect x="6.5" y="5" width="3" height="9" rx="1" fill="#6F8FAF"/>
+            <rect x="11" y="2" width="3" height="12" rx="1" fill="#6F8FAF"/>
+          </svg>
+        </div>
+        <div class="feat-title">Historical reports</div>
+        <div class="feat-body">Save your analyses and watch your spending trends over time. Month-by-month comparison makes patterns immediately obvious.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M8 2a6 6 0 100 12A6 6 0 008 2z" stroke="#8D7AA8" stroke-width="1.2"/>
+            <path d="M5 8h3V5" stroke="#8D7AA8" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="feat-title">Privacy first</div>
+        <div class="feat-body">No bank login required. Your PDF is never stored — processed in memory and discarded. Sensitive data is encrypted at rest. Your finances stay yours.</div>
+      </div>
+    </div>
+
+    <!-- More features coming -->
+    <div class="coming">
+      <p class="section-label" style="margin-bottom: 0.5rem">More features to come</p>
+      <h3 style="font-family:'DM Serif Display',serif;font-style:italic;font-size:22px;color:var(--text-primary);margin-bottom:0.4rem">We're just getting started.</h3>
+      <p style="font-size:13px;color:var(--text-muted);line-height:1.7">Clara is growing fast. Here's what's on the roadmap.</p>
+      <div class="coming-grid">
+        <div class="coming-item">
+          <div class="coming-badge">Coming soon</div>
+          <div class="coming-title">Saving ratio</div>
+          <div class="coming-body">See your saving rate as a percentage of income and track it month over month.</div>
+        </div>
+        <div class="coming-item">
+          <div class="coming-badge">Coming soon</div>
+          <div class="coming-title">Investment projection</div>
+          <div class="coming-body">Based on your monthly surplus, Clara projects what consistent investing could look like over 5, 10, and 20 years.</div>
+        </div>
+        <div class="coming-item">
+          <div class="coming-badge">Coming soon</div>
+          <div class="coming-title">Budget targets</div>
+          <div class="coming-body">Set monthly limits per category. Clara tracks your progress and flags when you're approaching the edge.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="section" id="pricing">
+    <p class="section-label">Pricing</p>
+    <h2 class="section-title">Simple. Cancel anytime.</h2>
+    <p class="section-sub">Start free and upgrade when you're ready. No lock-in, no surprises.</p>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-name">Free trial</div>
+        <div style="margin: 0.4rem 0">
+          <span class="price-amount">$0</span>
+        </div>
+        <div class="price-desc">3 lifetime analyses</div>
+        <hr class="price-divider">
+        <div class="price-feature"><span class="tick">✓</span>AI categorisation</div>
+        <div class="price-feature"><span class="tick">✓</span>Spending charts</div>
+        <div class="price-feature"><span class="tick">✓</span>Save report summaries</div>
+        <div class="price-feature crossed"><span>✗</span>AI insights</div>
+        <div class="price-feature crossed"><span>✗</span>Full transaction history</div>
+        <a class="price-btn" href="https://categoriz.streamlit.app/2_signup" target="_blank"
+           style="background:#0f0f18;color:#444;border:0.5px solid #252535">Start free</a>
+      </div>
+      <div class="price-card featured">
+        <div class="price-badge">Most popular</div>
+        <div class="price-name">Starter</div>
+        <div style="margin: 0.4rem 0">
+          <span class="price-amount">$9</span>
+          <span class="price-period">/month</span>
+        </div>
+        <div class="price-desc">10 analyses per month</div>
+        <hr class="price-divider">
+        <div class="price-feature"><span class="tick">✓</span>Everything in free</div>
+        <div class="price-feature"><span class="tick">✓</span>AI insights</div>
+        <div class="price-feature"><span class="tick">✓</span>Full transaction history</div>
+        <div class="price-feature"><span class="tick">✓</span>Historical reports</div>
+        <div class="price-feature crossed"><span>✗</span>Unlimited analyses</div>
+        <a class="price-btn" href="https://categoriz.streamlit.app/2_signup" target="_blank"
+           style="background:var(--gold);color:var(--night)">Get started →</a>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Unlimited</div>
+        <div style="margin: 0.4rem 0">
+          <span class="price-amount">$29</span>
+          <span class="price-period">/month</span>
+        </div>
+        <div class="price-desc">No monthly cap</div>
+        <hr class="price-divider">
+        <div class="price-feature"><span class="tick">✓</span>Everything in Starter</div>
+        <div class="price-feature"><span class="tick">✓</span>Unlimited analyses</div>
+        <div class="price-feature"><span class="tick">✓</span>Saving ratio metric</div>
+        <div class="price-feature"><span class="tick">✓</span>Investment projection</div>
+        <div class="price-feature"><span class="tick">✓</span>Budget targets</div>
+        <a class="price-btn" href="https://categoriz.streamlit.app/2_signup" target="_blank"
+           style="background:#0f0f18;color:var(--gold);border:0.5px solid var(--gold)">Get Unlimited</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" id="faq">
+    <p class="section-label">FAQ</p>
+    <h2 class="section-title">Frequently asked questions.</h2>
+    <div class="faq-list">
+
+      <div class="faq-item">
+        <div class="faq-header">
+          <span class="faq-question">Does Clara connect to my bank account?</span>
+          <div class="faq-icon"><span>+</span></div>
+        </div>
+        <div class="faq-answer">No. Clara never connects to your bank. You export a PDF statement from your bank's app and upload it — that's it. No login credentials, no open banking, no ongoing access.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-header">
+          <span class="faq-question">Is my financial data stored?</span>
+          <div class="faq-icon"><span>+</span></div>
+        </div>
+        <div class="faq-answer">Your PDF is never stored — it's processed in memory and discarded immediately. If you save a report, only the summary data (category totals, metrics) is stored, encrypted, on secure servers.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-header">
+          <span class="faq-question">Which banks does Clara work with?</span>
+          <div class="faq-icon"><span>+</span></div>
+        </div>
+        <div class="faq-answer">Clara works with any Australian bank that lets you export a PDF statement — including ANZ, CommBank, Westpac, NAB, ING, Macquarie, and most others.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-header">
+          <span class="faq-question">Can I cancel my subscription?</span>
+          <div class="faq-icon"><span>+</span></div>
+        </div>
+        <div class="faq-answer">Yes, anytime. No lock-in periods, no cancellation fees. Cancel from your settings page and you won't be charged again.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-header">
+          <span class="faq-question">What does beta mean for me?</span>
+          <div class="faq-icon"><span>+</span></div>
+        </div>
+        <div class="faq-answer">Clara is in early access. The core product is fully working — you can upload statements, get AI categorisation, and save reports right now. As a beta user you get access to all features at current prices, and we'll give you plenty of notice before anything changes.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <p class="section-label">Get started today</p>
+    <h2 class="cta-title">Ready to know<br>your money?</h2>
+    <p class="cta-sub">Free to try. No credit card required. Takes two minutes.</p>
+    <a class="btn-primary-lg" href="https://categoriz.streamlit.app/2_signup" target="_blank">Start for free →</a>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <a class="footer-logo" href="#">Clara</a>
+    <div class="footer-links">
+      <a class="footer-link" href="#">Privacy policy</a>
+      <a class="footer-link" href="#">Terms</a>
+      <a class="footer-link" href="mailto:cosmond00@gmail.com">Contact</a>
+    </div>
+    <div class="footer-copy">© 2026 Clara</div>
+  </footer>
+
+  <script>
+    // FAQ accordion
+    document.querySelectorAll('.faq-header').forEach(function(header) {
+      header.addEventListener('click', function() {
+        var item = this.parentElement;
+        var isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(function(i) {
+          i.classList.remove('open');
+        });
+        if (!isOpen) item.classList.add('open');
+      });
+    });
+
+    // Smooth scroll for nav links (fallback for older browsers)
+    document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+      anchor.addEventListener('click', function(e) {
+        var target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+
+    // Nav active state on scroll
+    var sections = document.querySelectorAll('section[id]');
+    var navLinks = document.querySelectorAll('.nav-link');
+    window.addEventListener('scroll', function() {
+      var scrollY = window.scrollY;
+      sections.forEach(function(section) {
+        var top = section.offsetTop - 100;
+        var bottom = top + section.offsetHeight;
+        if (scrollY >= top && scrollY < bottom) {
+          navLinks.forEach(function(link) {
+            link.style.color = link.getAttribute('href') === '#' + section.id
+              ? '#F2EEE6' : '';
+          });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
