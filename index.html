@@ -46,14 +46,14 @@
     }
 
     /* ── Layout ───────────────────────────────────────────────────────────── */
-    .container { max-width: 1080px; margin: 0 auto; padding: 0 2.5rem; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 4rem; }
 
     /* ── Navigation ───────────────────────────────────────────────────────── */
     .nav {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1.25rem 2.5rem;
+      padding: 1.25rem 4rem;
       border-bottom: 0.5px solid var(--border);
       position: sticky;
       top: 0;
@@ -108,7 +108,7 @@
     .beta-bar {
       background: var(--surface);
       border-bottom: 0.5px solid var(--border);
-      padding: 0.65rem 1rem;
+      padding: 0.65rem 4rem;
       text-align: center;
       display: flex;
       align-items: center;
@@ -129,7 +129,7 @@
 
     /* ── Hero ─────────────────────────────────────────────────────────────── */
     .hero {
-      padding: 5rem 2.5rem 0;
+      padding: 5rem 4rem 0;
       text-align: center;
       border-bottom: 0.5px solid var(--border);
     }
@@ -180,7 +180,7 @@
       border: 0.5px solid var(--border-2);
       border-radius: 14px 14px 0 0;
       overflow: hidden;
-      max-width: 860px;
+      max-width: 780px;
       margin: 0 auto;
     }
     .ss-titlebar {
@@ -259,7 +259,7 @@
 
     /* ── Section base ─────────────────────────────────────────────────────── */
     .section {
-      padding: 5rem 2.5rem;
+      padding: 5rem 4rem;
       border-bottom: 0.5px solid var(--border);
     }
     .section-label {
@@ -517,7 +517,7 @@
 
     /* ── CTA ──────────────────────────────────────────────────────────────── */
     .cta-section {
-      padding: 6rem 2.5rem;
+      padding: 6rem 4rem;
       text-align: center;
       border-bottom: 0.5px solid var(--border);
     }
@@ -533,7 +533,7 @@
 
     /* ── Footer ───────────────────────────────────────────────────────────── */
     .footer {
-      padding: 2rem 2.5rem;
+      padding: 2rem 4rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -687,36 +687,48 @@
         <div class="step-img" style="padding:0;overflow:hidden;background:#0f0f18">
           <svg width="100%" viewBox="0 0 320 140" xmlns="http://www.w3.org/2000/svg">
             <rect width="320" height="140" fill="#0f0f18"/>
-            <!-- Document background -->
-            <rect x="48" y="10" width="180" height="120" rx="6" fill="#f5f3ee"/>
-            <!-- Document lines — statement rows -->
-            <text x="60" y="30" font-family="DM Sans" font-size="7" fill="#999">Account statement · March 2026</text>
-            <line x1="60" y1="34" x2="216" y2="34" stroke="#ddd" stroke-width="0.5"/>
-            <!-- Row 1 — account number redacted -->
-            <text x="60" y="48" font-family="DM Sans" font-size="6.5" fill="#555">Account number</text>
-            <rect x="130" y="39" width="78" height="12" rx="2" fill="#1a1a1a"/>
-            <!-- Row 2 — BSB redacted -->
-            <text x="60" y="63" font-family="DM Sans" font-size="6.5" fill="#555">BSB</text>
-            <rect x="130" y="54" width="48" height="12" rx="2" fill="#1a1a1a"/>
-            <!-- Row 3 — Name redacted -->
-            <text x="60" y="78" font-family="DM Sans" font-size="6.5" fill="#555">Account name</text>
-            <rect x="130" y="69" width="68" height="12" rx="2" fill="#1a1a1a"/>
-            <!-- Row 4 — normal visible transaction -->
-            <text x="60" y="93" font-family="DM Sans" font-size="6.5" fill="#555">Woolworths</text>
-            <text x="180" y="93" font-family="DM Sans" font-size="6.5" fill="#555">$91.00</text>
-            <line x1="60" y1="97" x2="216" y2="97" stroke="#eee" stroke-width="0.5"/>
-            <!-- Row 5 — normal visible transaction -->
-            <text x="60" y="108" font-family="DM Sans" font-size="6.5" fill="#555">Ampol</text>
-            <text x="180" y="108" font-family="DM Sans" font-size="6.5" fill="#555">$136.29</text>
-            <!-- Cursor/redact tool indicator -->
-            <rect x="218" y="39" width="58" height="84" rx="6" fill="#171720" stroke="#252535" stroke-width="0.5"/>
-            <text x="247" y="58" text-anchor="middle" font-family="DM Sans" font-size="6" fill="#F5B731">Redact tool</text>
-            <rect x="228" y="63" width="38" height="6" rx="2" fill="#1a1a1a"/>
-            <text x="247" y="82" text-anchor="middle" font-family="DM Sans" font-size="6" fill="#555">Click to black</text>
-            <text x="247" y="91" text-anchor="middle" font-family="DM Sans" font-size="6" fill="#555">out anything</text>
-            <text x="247" y="100" text-anchor="middle" font-family="DM Sans" font-size="6" fill="#555">sensitive</text>
-            <rect x="228" y="107" width="38" height="10" rx="3" fill="#F5B731"/>
-            <text x="247" y="115" text-anchor="middle" font-family="DM Sans" font-weight="500" font-size="5.5" fill="#0b0b12">Done, analyse</text>
+            <!-- Toolbar -->
+            <rect x="16" y="8" width="288" height="18" rx="4" fill="#1c1c28" stroke="#252535" stroke-width="0.5"/>
+            <rect x="22" y="11" width="18" height="12" rx="3" fill="#252535"/>
+            <text x="31" y="20" text-anchor="middle" font-family="DM Sans" font-size="8" fill="#888">◄</text>
+            <text x="48" y="20" text-anchor="middle" font-family="DM Sans" font-size="6.5" fill="#666">1 / 2</text>
+            <rect x="60" y="11" width="18" height="12" rx="3" fill="#252535"/>
+            <text x="69" y="20" text-anchor="middle" font-family="DM Sans" font-size="8" fill="#888">►</text>
+            <text x="108" y="20" text-anchor="middle" font-family="DM Sans" font-size="9" fill="#888">⊕</text>
+            <text x="124" y="20" text-anchor="middle" font-family="DM Sans" font-size="9" fill="#F5B731">⊞</text>
+            <text x="140" y="20" text-anchor="middle" font-family="DM Sans" font-size="9" fill="#888">⊟</text>
+            <text x="156" y="20" text-anchor="middle" font-family="DM Sans" font-size="9" fill="#888">⛶</text>
+            <!-- White document -->
+            <rect x="16" y="30" width="288" height="104" rx="4" fill="#f5f2ec" stroke="#ddd" stroke-width="0.5"/>
+            <!-- Orange heading -->
+            <text x="36" y="48" font-family="DM Sans" font-weight="500" font-size="11" fill="#c0451a">Interim statement</text>
+            <line x1="26" y1="53" x2="294" y2="53" stroke="#ddd" stroke-width="0.5"/>
+            <!-- Row: Client Number — already redacted -->
+            <text x="26" y="64" font-family="DM Sans" font-size="6.5" fill="#555">Client Number</text>
+            <rect x="90" y="56" width="44" height="10" rx="1.5" fill="#1a1a1a"/>
+            <text x="180" y="64" font-family="DM Sans" font-size="6.5" fill="#555">Statement Start Date</text>
+            <text x="294" y="64" text-anchor="end" font-family="DM Sans" font-size="6.5" fill="#333">01 Mar 2026</text>
+            <!-- Row: Account — red dashed selection box -->
+            <text x="26" y="79" font-family="DM Sans" font-size="6.5" fill="#555">Account</text>
+            <rect x="86" y="70" width="68" height="12" rx="2" fill="#f87171" fill-opacity="0.15"/>
+            <rect x="86" y="70" width="68" height="12" rx="2" fill="none" stroke="#f87171" stroke-width="0.75" stroke-dasharray="2.5 1.5"/>
+            <text x="89" y="79" font-family="DM Sans" font-size="6.5" fill="#444">123-456 78901234</text>
+            <text x="180" y="79" font-family="DM Sans" font-size="6.5" fill="#555">Statement End Date</text>
+            <text x="294" y="79" text-anchor="end" font-family="DM Sans" font-size="6.5" fill="#333">31 Mar 2026</text>
+            <!-- Account type row -->
+            <text x="110" y="93" text-anchor="middle" font-family="DM Sans" font-weight="500" font-size="6.5" fill="#333">Account Type</text>
+            <text x="210" y="93" text-anchor="middle" font-family="DM Sans" font-size="6.5" fill="#333">Orange Everyday</text>
+            <line x1="26" y1="97" x2="294" y2="97" stroke="#ddd" stroke-width="0.5"/>
+            <!-- Table header -->
+            <text x="26" y="107" font-family="DM Sans" font-weight="500" font-size="5.5" fill="#666">Date</text>
+            <text x="70" y="107" font-family="DM Sans" font-weight="500" font-size="5.5" fill="#666">Description</text>
+            <text x="220" y="107" font-family="DM Sans" font-weight="500" font-size="5.5" fill="#666">Deposit ($)</text>
+            <text x="294" y="107" text-anchor="end" font-family="DM Sans" font-weight="500" font-size="5.5" fill="#666">Balance ($)</text>
+            <line x1="26" y1="111" x2="294" y2="111" stroke="#ddd" stroke-width="0.5"/>
+            <!-- Crosshair — small, positioned bottom-right of highlight box -->
+            <!-- Box bottom-right is at x=154, y=82 -->
+            <line x1="157" y1="78" x2="157" y2="90" stroke="#1a1a1a" stroke-width="1.2" stroke-linecap="round"/>
+            <line x1="151" y1="84" x2="163" y2="84" stroke="#1a1a1a" stroke-width="1.2" stroke-linecap="round"/>
           </svg>
         </div>
         <div class="step-num">02</div>
