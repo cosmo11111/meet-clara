@@ -72,6 +72,7 @@
     .nav-links {
       display: flex;
       gap: 2rem;
+      align-items: center;
     }
     .nav-link {
       font-size: 13px;
@@ -80,7 +81,7 @@
       transition: color 0.2s;
     }
     .nav-link:hover { color: var(--text-primary); }
-    .nav-actions { display: flex; gap: 10px; align-items: center; }
+    .nav-actions { display: flex; gap: 10px; align-items: center; margin-left: 2rem; }
     .btn-ghost {
       font-size: 13px;
       color: var(--text-secondary);
@@ -574,15 +575,17 @@
   <!-- Navigation -->
   <nav class="nav">
     <a class="nav-logo" href="#">Clara</a>
-    <div class="nav-links">
-      <a class="nav-link" href="#how">How it works</a>
-      <a class="nav-link" href="#features">Features</a>
-      <a class="nav-link" href="#pricing">Pricing</a>
-      <a class="nav-link" href="#faq">FAQ</a>
-    </div>
-    <div class="nav-actions">
-      <a class="btn-ghost" href="https://categoriz.streamlit.app/1_login" target="_blank">Log in</a>
-      <a class="btn-gold" href="https://categoriz.streamlit.app/2_signup" target="_blank">Sign up free</a>
+    <div style="display:flex;align-items:center;gap:0">
+      <div class="nav-links">
+        <a class="nav-link" href="#how">How it works</a>
+        <a class="nav-link" href="#features">Features</a>
+        <a class="nav-link" href="#pricing">Pricing</a>
+        <a class="nav-link" href="#faq">FAQ</a>
+      </div>
+      <div class="nav-actions">
+        <a class="btn-ghost" href="https://categoriz.streamlit.app/1_login" target="_blank">Log in</a>
+        <a class="btn-gold" href="https://categoriz.streamlit.app/2_signup" target="_blank">Sign up free</a>
+      </div>
     </div>
   </nav>
 
@@ -681,16 +684,85 @@
         <div class="step-body">Export a PDF from your bank's app or website. Clara works with any Australian bank statement format.</div>
       </div>
       <div class="step">
-        <div class="step-img">
-          <span class="step-img-placeholder">Screenshot coming</span>
+        <div class="step-img" style="padding:0;overflow:hidden;background:#0f0f18">
+          <svg width="100%" viewBox="0 0 320 140" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="140" fill="#0f0f18"/>
+            <!-- Document background -->
+            <rect x="48" y="10" width="180" height="120" rx="6" fill="#f5f3ee"/>
+            <!-- Document lines — statement rows -->
+            <text x="60" y="30" font-family="DM Sans" font-size="7" fill="#999">Account statement · March 2026</text>
+            <line x1="60" y1="34" x2="216" y2="34" stroke="#ddd" stroke-width="0.5"/>
+            <!-- Row 1 — account number redacted -->
+            <text x="60" y="48" font-family="DM Sans" font-size="6.5" fill="#555">Account number</text>
+            <rect x="130" y="39" width="78" height="12" rx="2" fill="#1a1a1a"/>
+            <!-- Row 2 — BSB redacted -->
+            <text x="60" y="63" font-family="DM Sans" font-size="6.5" fill="#555">BSB</text>
+            <rect x="130" y="54" width="48" height="12" rx="2" fill="#1a1a1a"/>
+            <!-- Row 3 — Name redacted -->
+            <text x="60" y="78" font-family="DM Sans" font-size="6.5" fill="#555">Account name</text>
+            <rect x="130" y="69" width="68" height="12" rx="2" fill="#1a1a1a"/>
+            <!-- Row 4 — normal visible transaction -->
+            <text x="60" y="93" font-family="DM Sans" font-size="6.5" fill="#555">Woolworths</text>
+            <text x="180" y="93" font-family="DM Sans" font-size="6.5" fill="#555">$91.00</text>
+            <line x1="60" y1="97" x2="216" y2="97" stroke="#eee" stroke-width="0.5"/>
+            <!-- Row 5 — normal visible transaction -->
+            <text x="60" y="108" font-family="DM Sans" font-size="6.5" fill="#555">Ampol</text>
+            <text x="180" y="108" font-family="DM Sans" font-size="6.5" fill="#555">$136.29</text>
+            <!-- Cursor/redact tool indicator -->
+            <rect x="218" y="39" width="58" height="84" rx="6" fill="#171720" stroke="#252535" stroke-width="0.5"/>
+            <text x="247" y="58" text-anchor="middle" font-family="DM Sans" font-size="6" fill="#F5B731">Redact tool</text>
+            <rect x="228" y="63" width="38" height="6" rx="2" fill="#1a1a1a"/>
+            <text x="247" y="82" text-anchor="middle" font-family="DM Sans" font-size="6" fill="#555">Click to black</text>
+            <text x="247" y="91" text-anchor="middle" font-family="DM Sans" font-size="6" fill="#555">out anything</text>
+            <text x="247" y="100" text-anchor="middle" font-family="DM Sans" font-size="6" fill="#555">sensitive</text>
+            <rect x="228" y="107" width="38" height="10" rx="3" fill="#F5B731"/>
+            <text x="247" y="115" text-anchor="middle" font-family="DM Sans" font-weight="500" font-size="5.5" fill="#0b0b12">Done, analyse</text>
+          </svg>
         </div>
         <div class="step-num">02</div>
         <div class="step-title">Redact private info</div>
         <div class="step-body">Use the built-in redaction tool to black out account numbers and personal details before AI processing.</div>
       </div>
       <div class="step">
-        <div class="step-img">
-          <span class="step-img-placeholder">Screenshot coming</span>
+        <div class="step-img" style="padding:0;overflow:hidden;background:#0f0f18">
+          <svg width="100%" viewBox="0 0 320 140" xmlns="http://www.w3.org/2000/svg">
+            <rect width="320" height="140" fill="#0f0f18"/>
+            <!-- Metric tiles -->
+            <rect x="12" y="10" width="88" height="34" rx="6" fill="#171720" stroke="#1c1c28" stroke-width="0.5"/>
+            <text x="20" y="22" font-family="DM Sans" font-size="5.5" fill="#333345">TOTAL SPENT</text>
+            <text x="20" y="36" font-family="DM Sans" font-weight="300" font-size="13" fill="#C4604A">$3,210</text>
+            <rect x="108" y="10" width="88" height="34" rx="6" fill="#171720" stroke="#1c1c28" stroke-width="0.5"/>
+            <text x="116" y="22" font-family="DM Sans" font-size="5.5" fill="#333345">INCOME</text>
+            <text x="116" y="36" font-family="DM Sans" font-weight="300" font-size="13" fill="#5E9E78">$5,200</text>
+            <rect x="204" y="10" width="104" height="34" rx="6" fill="#171720" stroke="#1c1c28" stroke-width="0.5"/>
+            <text x="212" y="22" font-family="DM Sans" font-size="5.5" fill="#333345">SURPLUS</text>
+            <text x="212" y="36" font-family="DM Sans" font-weight="300" font-size="13" fill="#F5B731">$1,990</text>
+            <!-- AI insight box -->
+            <rect x="12" y="52" width="176" height="36" rx="6" fill="#171720" stroke="#F5B731" stroke-width="0.5"/>
+            <text x="20" y="63" font-family="DM Sans" font-size="5.5" fill="#F5B731">✦ CLARA'S INSIGHT</text>
+            <text x="20" y="74" font-family="DM Sans" font-size="6" fill="#555">Your surplus was $1,990 — your</text>
+            <text x="20" y="82" font-family="DM Sans" font-size="6" fill="#555">strongest month in three months.</text>
+            <!-- Donut chart -->
+            <circle cx="262" cy="88" r="36" fill="none" stroke="#1c1c28" stroke-width="14"/>
+            <circle cx="262" cy="88" r="36" fill="none" stroke="#C4604A" stroke-width="14" stroke-dasharray="62 165" stroke-dashoffset="0"/>
+            <circle cx="262" cy="88" r="36" fill="none" stroke="#5B8DB8" stroke-width="14" stroke-dasharray="32 195" stroke-dashoffset="-62"/>
+            <circle cx="262" cy="88" r="36" fill="none" stroke="#9B6EA8" stroke-width="14" stroke-dasharray="28 199" stroke-dashoffset="-94"/>
+            <circle cx="262" cy="88" r="36" fill="none" stroke="#C47A45" stroke-width="14" stroke-dasharray="43 184" stroke-dashoffset="-122"/>
+            <circle cx="262" cy="88" r="36" fill="none" stroke="#6A6D78" stroke-width="14" stroke-dasharray="62 165" stroke-dashoffset="-165"/>
+            <text x="262" y="85" text-anchor="middle" font-family="DM Sans" font-weight="300" font-size="9" fill="#F2EEE6">$3,210</text>
+            <text x="262" y="95" text-anchor="middle" font-family="DM Sans" font-size="6.5" fill="#444">total spend</text>
+            <!-- Category rows -->
+            <rect x="12" y="96" width="176" height="38" rx="6" fill="#171720" stroke="#1c1c28" stroke-width="0.5"/>
+            <rect x="20" y="103" width="6" height="6" rx="1" fill="#C4604A"/>
+            <text x="30" y="109" font-family="DM Sans" font-size="6" fill="#888">Food &amp; Dining</text>
+            <text x="164" y="109" text-anchor="end" font-family="DM Sans" font-size="6" fill="#F2EEE6">$842</text>
+            <rect x="20" y="114" width="6" height="6" rx="1" fill="#5B8DB8"/>
+            <text x="30" y="120" font-family="DM Sans" font-size="6" fill="#888">Transport</text>
+            <text x="164" y="120" text-anchor="end" font-family="DM Sans" font-size="6" fill="#F2EEE6">$520</text>
+            <rect x="20" y="125" width="6" height="6" rx="1" fill="#9B6EA8"/>
+            <text x="30" y="131" font-family="DM Sans" font-size="6" fill="#888">Shopping</text>
+            <text x="164" y="131" text-anchor="end" font-family="DM Sans" font-size="6" fill="#F2EEE6">$398</text>
+          </svg>
         </div>
         <div class="step-num">03</div>
         <div class="step-title">Understand your spending</div>
